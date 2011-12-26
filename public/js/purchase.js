@@ -128,6 +128,27 @@ Products.prototype = {
 			artno = this.getProduct(input);
 			amount = 1;
 		}
+		if(artno==null && input.match(/^\%\%/)) {
+			ajax = ajax_create();
+			ajax.open("POST", "/Coupon/info", false);
+			ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			ajax.send('code='+input);
+			if(JSON) {
+				var coupon = JSON.parse(ajax.responseText);
+			} else {
+				var coupon = eval('(' + ajax.responseText + ')');
+			}
+			if(coupon.status == 'valid') {
+				artno=input;
+				this.addProduct(artno, input, coupon.display, null, null, coupon.value, false, null);
+			} else if(coupon.status == 'error') {
+				alert(coupon.error);
+				return;
+			} else if(coupon.status == 'plundered') {
+				alert('Denna kupong har redan plundrats');
+				return;
+			}
+		}
 		if(artno==null) {
 			// Input är ej art.nr eller EAN
 			alert("Oväntad inmatning - ej artikelnummer eller EAN");

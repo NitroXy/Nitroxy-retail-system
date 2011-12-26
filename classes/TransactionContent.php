@@ -1,6 +1,7 @@
 <?php
 
 class TransactionContent extends BasicObject {
+	public $coupon=null;
 
 	/**
 	 * Used by BasicObject to determine the table name.
