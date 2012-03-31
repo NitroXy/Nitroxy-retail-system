@@ -1,3 +1,5 @@
+BEGIN;
+
 SET FOREIGN_KEY_CHECKS=0;
 REPLACE INTO account set
 	account_id = 1,
@@ -47,14 +49,6 @@ REPLACE INTO account set
 	warn_on_non_default = false,
 	description = 'Pengar bundna i varor i kiosken',
 	account_type = 'balance';
-REPLACE INTO account set
-	account_id = 8,
-	name = 'Lagerförändring',
-	code_name = 'stock_change',
-	default_sign = 'kredit',
-	warn_on_non_default = false,
-	description = 'Används som motkonteringskonto för lager vid leverans och försäljning',
-	account_type = 'result';
 REPLACE INTO account set
 	account_id = 9,
 	name = 'Lagerdifferenser',
@@ -111,4 +105,38 @@ REPLACE INTO account set
 	warn_on_non_default = true,
 	description = 'Inkomster av donnationer',
 	account_type = 'result';
+REPLACE INTO account set
+	account_id = 16,
+	name = 'Pant',
+	code_name = 'pant',
+	default_sign = 'debit',
+	warn_on_non_default = false,
+	description = 'Pengar bundna i pant',
+	account_type = 'balance';
+REPLACE INTO account set
+	account_id = 17,
+	name = 'Ingående',
+	code_name = 'start',
+	default_sign = 'debit',
+	warn_on_non_default = false,
+	description = 'Ingående värden för start av systemet',
+	account_type = 'result';
+REPLACE INTO account set
+	account_id = 18,
+	name = 'Öresavrundningar',
+	code_name = 'rounding',
+	default_sign = 'debit',
+	warn_on_non_default = false,
+	description = 'Öresavrundningar vid inköp, försäljning mm',
+	account_type = 'result';
 SET FOREIGN_KEY_CHECKS=1;
+
+INSERT INTO categories (category_id, name) VALUES
+	(0, 'Special');
+UPDATE categories SET category_id = 0 WHERE name = 'Special'; -- WTF! Why do I need this?
+
+INSERT INTO products (product_id, name, price, ean, category_id, value, count, inventory_threshold, active) VALUES
+	(0, 'Öresavrundning', 0, 'rounding', 0, 0, 0, null, 1);
+UPDATE products SET product_id = 0 WHERE ean = 'rounding'; -- WTF! Why do I need this?
+
+COMMIT;
