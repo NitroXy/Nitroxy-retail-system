@@ -57,6 +57,7 @@ class RetailC extends Controller {
 		}
 		$transaction->commit();
 		$db->commit();
+		open_box();
 		$_SESSION['random'] = ClientData::post('random');
 		kick("/Retail/create/$recieved");
 	}
