@@ -1,4 +1,6 @@
 <?php
+class ExternalLoginDisabled extends Exception {}
+
 class User extends BasicObject{
 	public static function table_name() {
 		return 'users';
@@ -11,7 +13,11 @@ class User extends BasicObject{
 	public static function login($username, $password) {
 		$user = self::internal_login($username, $password);
 		if($user) return $user;
-		return self::external_login($username, $password);
+		try {
+			return self::external_login($username, $password);
+		} catch(ExternalLoginDisabled $e) {
+		}
+		throw new Exception("Inloggning misslyckades.");
 	}
 
 	private static function internal_login($username, $password) {
@@ -25,6 +31,7 @@ class User extends BasicObject{
 	}
 
 	private  static function external_login($username, $password) {
+		throw new ExternalLoginDisabled();
 		$request = curl_init('https://bruse.proxxi.org/authenticate.php');
 		curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($request, CURLOPT_SSL_VERIFYPEER, false);
