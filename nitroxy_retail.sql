@@ -254,7 +254,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `user_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `first_name` varchar(100) COLLATE utf8_swedish_ci NOT NULL,
   `surname` varchar(100) COLLATE utf8_swedish_ci NOT NULL,
   `username` varchar(100) COLLATE utf8_swedish_ci NOT NULL,
