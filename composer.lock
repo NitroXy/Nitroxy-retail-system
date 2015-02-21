@@ -1,0 +1,46 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "9777edc9c05debbea45507177f2e76d2",
+    "packages": [
+        {
+            "name": "nitroxy/nxauth",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/NitroXy/nxauth.git",
+                "reference": "87d185733699100860a4870877160451026995b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/NitroXy/nxauth/zipball/87d185733699100860a4870877160451026995b8",
+                "reference": "87d185733699100860a4870877160451026995b8",
+                "shasum": ""
+            },
+            "type": "library",
+            "authors": [
+                {
+                    "name": "Andreas Tarandi",
+                    "email": "torandi@gmail.com"
+                }
+            ],
+            "description": "A module for authenticating with NitroXys CAS-service",
+            "support": {
+                "source": "https://github.com/NitroXy/nxauth/tree/v1.0",
+                "issues": "https://github.com/NitroXy/nxauth/issues"
+            },
+            "time": "2015-02-21 20:25:32"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
