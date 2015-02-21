@@ -1,0 +1,2 @@
+ALTER TABLE `users` ADD `remote_id` INT UNSIGNED NULL DEFAULT NULL , ADD UNIQUE (`remote_id`) ;
+ALTER TABLE `users` CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;

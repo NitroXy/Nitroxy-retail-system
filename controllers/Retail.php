@@ -2,6 +2,13 @@
 class RetailC extends Controller {
 	protected $_default_site = 'create';
 
+	public function __construct($site, $data = array()) {
+		parent::__construct($site, $data);
+		global $settings;
+		if($settings['allow_anonymous_shopping'] !== true) {
+			verify_login(kickback_url());
+		}
+	}
 	public function create($params) {
 		$this->_access_type('html');
 		$this->last_purchase = Transaction::last();

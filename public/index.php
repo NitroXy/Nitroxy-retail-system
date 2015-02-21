@@ -8,7 +8,11 @@ $request=explode('/',$path_info);
 array_shift($request);
 $main=array_shift($request);
 if($main == '') {
-	$main = "Retail";
+	if($settings['allow_anonymous_shopping'] === true) {
+		$main = "Retail";
+	} else {
+		$main = "Product";
+	}
 }
 $page = $main.'C';
 if(!class_exists($page)) {

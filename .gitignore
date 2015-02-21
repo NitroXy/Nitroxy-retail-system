@@ -1,3 +1,5 @@
 db_settings/nitroxy_retail.local.php
+/settings.local.php
 
 /vendor/
+/nxauth_private_key

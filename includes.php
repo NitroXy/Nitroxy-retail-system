@@ -1,4 +1,6 @@
 <?php
+$global_root = dirname(__FILE__);
+
 // Get settings
 require_once "settings.php";
 
@@ -15,4 +17,4 @@ require_once "inc_app/application.php";
 require_once "inc_app/helpers.php";
 require_once "inc_app/open_box.php";
 
-?>
+require_once "helpers/nxauth.php";

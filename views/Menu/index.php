@@ -1,5 +1,11 @@
 <ul class="menu">
-	<li><a href="/Retail">Handla</a></li>
+	<?php
+	if($loged_in || ($settings['allow_anonymous_shopping']===true)) {
+		?>
+		<li><a href="/Retail">Handla</a></li>
+		<?php
+	}
+	?>
 	<li><a href="/Product/price_list">Prislista</a></li>
 	<?php if($loged_in): ?>
 		<li class="dir">
@@ -56,8 +62,13 @@
 		</li>
 	<?php else: ?>
 		<li>
-			<a href="/Session/login?kickback=<?=htmlspecialchars(kickback_url())?>">
+			<a href="/Session/nx_login?kickback=<?=htmlspecialchars(kickback_url())?>">
 				Logga in
+			</a>
+		</li>
+		<li>
+			<a href="/Session/login?kickback=<?=htmlspecialchars(kickback_url())?>">
+				Lokal inloggning
 			</a>
 		</li>
 	<?php endif ?>

@@ -11,6 +11,8 @@ class MenuC extends Controller {
 		$this->accounts = Account::selection(array(
 			'@order' => array('account_type:desc', 'default_sign', 'name'),
 		));
+		global $settings;
+		$this->settings = $settings;
 	}
 }
 ?>
