@@ -16,12 +16,12 @@ class AccountTransaction extends BasicObject {
 
 	public function add_contents($contents) {
 		if(array_sum($contents) != 0) {
-			throw new Exception("Account contents do not balance");
+			throw new Exception("Account contents do not balance. Diff: ".array_sum($contents)." accounts: ".print_r($contents, true));
 		}
 		foreach($contents as $account => $amount) {
 			$content = new AccountTransactionContent();
 			$content->account_transaction_id = $this->id;
-			$content->account_id = Account::from_code_name($account)->id;
+			$content->Account = Account::from_code_name($account);
 			if($content->account_id === null) {
 				throw new Exception("No such account $account");
 			}

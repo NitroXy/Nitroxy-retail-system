@@ -54,6 +54,7 @@ function update_sum() {
 	var table = document.getElementById('delivery_form');
 	var counts = table.getElementsByClassName('count');
 	var prices = table.getElementsByClassName('purchase_price');
+	var pants = table.getElementsByClassName('pant');
 	var sales = table.getElementsByClassName('sales_price');
 	var row_sums = table.getElementsByClassName('row-sum');
 	var row_as = table.getElementsByClassName('row-a');
@@ -61,21 +62,35 @@ function update_sum() {
 	var per_product = !(document.getElementById('product_type').checked);
 	var multiplyer = document.getElementById('multiplyer').value;
 	var sum = 0;
+	var sum_ex = 0;
 	var row_sum = 0;
 	var row_a = 0;
 	for(var i=0; i< counts.length; ++i) {
+		var pant = 0;
+		if(pants[i].value != '') {
+			pant = pants[i].value * 1;
+		}
+		var price = prices[i].value * 1 + pant;
 		if(per_product) {
-			row_sum = counts[i].value * prices[i].value * multiplyer;
-			row_a = prices[i].value * multiplyer;
+			row_sum_ex = counts[i].value * price;
+			row_sum = counts[i].value * price * multiplyer;
+			row_a = price * multiplyer;
 		} else {
-			row_sum = prices[i].value * multiplyer;
-			row_a = prices[i].value / counts[i].value * multiplyer;
+			row_sum_ex = price;
+			row_sum = price * multiplyer;
+			row_a = price / counts[i].value * multiplyer;
 		}
 		row_sums[i].innerHTML = Math.round(row_sum*100)/100 + ' kr';
 		row_as[i].innerHTML = Math.round(row_a*100)/100 + ' kr';
 		var revenue = sales[i].value - row_a;
 		row_margins[i].innerHTML = Math.round(revenue / sales[i].value * 100)+' %';
+		sum_ex += row_sum_ex;
 		sum += row_sum;
 	}
-	document.getElementById('sum').innerHTML = Math.round(sum*100)/100;
+	sum = Math.round(sum*100)/100;
+	sum_ex = Math.round(sum_ex*100)/100;
+	if(sum != sum_ex) {
+		sum = sum + ' (' + sum_ex + ' excl.)';
+	}
+	document.getElementById('sum').innerHTML = sum;
 }

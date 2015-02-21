@@ -1,14 +1,14 @@
 <script type="text/javascript">
 <!--
 var products = new Array();
-<? foreach($products as $product): ?>
+<?php foreach($products as $product): ?>
 	products['<?=$product->ean?>'] = {
 		id: <?=$product->id?>,
 		name: '<?=addslashes(htmlspecialchars_decode($product->name, ENT_QUOTES))?>',
 		sales_price: '<?=$product->price?>',
 		category_id: <?=$product->category_id?>
 	}
-<? endforeach ?>
+<?php endforeach ?>
 -->
 </script>
 <h1>Ny inleverans</h1>
@@ -16,9 +16,12 @@ var products = new Array();
 		onsubmit="return confirm('Vill du fortsätta skapa leveransen?');">
 	<div>
 		<input type="hidden" name="random" value="<?=get_rand()?>" />
-		<textarea rows="5" cols="50" name="description" id="initial_focus"><?=$old_values?
-				$old_values['description'] :
-				''?></textarea>
+		<textarea
+			rows="5"
+			cols="50"
+			name="description"
+			id="initial_focus"
+		><?=old_value('description', $old_values)?></textarea>
 	</div>
 	<table>
 		<tfoot>
@@ -52,27 +55,27 @@ var products = new Array();
 						<option
 							value=""
 							disabled="disabled"
-							<? if(!$old_values || $old_values['from_account'][0] == ''): ?>
+							<?php if(!old_value('from_account', $old_values) || old_value('from_account', $old_values, 0) === ''): ?>
 								selected="selected"
-							<? endif ?>
+							<?php endif ?>
 						>
 							Välj konto
 						</option>
-						<? foreach(Account::selection(array(
+						<?php foreach(Account::selection(array(
 								'account_type' => 'balance', 
 								'@order' => 'name',
 								'code_name:not_in' => array('stock',),
 						)) as $account): ?>
 							<option
 								value="<?=$account->code_name?>"
-								<? if($old_values && $old_values['from_account'][0] == $account->code_name): ?>
+								<?php if(old_value('from_account', $old_values, 0) == $account->code_name): ?>
 									selected="selected"
-								<? endif ?>
+								<?php endif ?>
 								title="<?=$account->description?>"
 							>
 								<?=$account->name?>
 							</option>
-						<? endforeach ?>
+						<?php endforeach ?>
 					</select>
 				</td>
 				<td rowspan="2"><a href="#" onclick="
@@ -90,7 +93,7 @@ var products = new Array();
 					<input type="text"
 						name="amount[]"
 						onkeyress="fix_comma(event, this);"
-						value="<?=$old_values?$old_values['amount'][0]:''?>"
+						value="<?=old_value('amount', $old_values, 0)?>"
 						style="width: 3em;" />
 				</td>
 			</tr>
@@ -104,7 +107,7 @@ var products = new Array();
 					id="product_type"
 					value="product_type"
 					onchange="update_sum();"
-					<?=($old_values && $old_values['price_per']=='product_type') ?
+					<?=(old_value('price_per', $old_values)=='product_type') ?
 							'checked="checked"' :
 							''?> />
 				Pris per varotyp
@@ -116,7 +119,7 @@ var products = new Array();
 					name="price_per"
 					value="each_product"
 					onchange="update_sum();"
-					<?=($old_values && $old_values['price_per']=='each_product') ?
+					<?=(old_value('price_per', $old_values) == 'each_product') ?
 							'checked="checked"' :
 							''?> />
 				Pris per enskild vara
@@ -131,11 +134,11 @@ var products = new Array();
 			id="multiplyer"
 			onchange="update_sum();"
 			onkeyress="fix_comma(event, this);"
-			<? if($old_values): ?>
+			<?php if(old_value('multiplyer', $old_values)): ?>
 				value="<?=$old_values['multiplyer']?>"
-			<? else: ?>
+			<?php else: ?>
 				value="1.0"
-			<? endif ?>
+			<?php endif ?>
 		/>
 	</p>
 	<table id="delivery_form">
@@ -147,6 +150,7 @@ var products = new Array();
 				<th>Kategori</th>
 				<th>Antal</th>
 				<th>Inköpspris</th>
+				<th>Pant</th>
 				<th>Rad kostnad</th>
 				<th>a kostnad</th>
 				<th>Marginal</th>
@@ -211,6 +215,13 @@ var products = new Array();
 							value="<?=$row['purchase_price']?>"
 						/>
 					</td>
+
+				<td><input type="text" class="pant"
+						name="pant[]"
+						onkeypress="fix_comma(event, this)"
+						onblur="update_sum()"
+						value="<?=$row['pant']?>"
+						/></td>
 					<td class="row-sum numeric"></td>
 					<td class="row-a numeric"></td>
 					<td class="row-margin numeric"></td>
@@ -225,6 +236,7 @@ var products = new Array();
 					<input
 						type="text"
 						class="sales_price"
+						onblur="update_sum()"
 						onkeypress="fix_comma(event, this)"
 						name="sales_price[]"
 					/>
@@ -234,17 +246,23 @@ var products = new Array();
 						<option value="" disabled="disabled" selected="selected">
 							Välj kategori
 						</option>
-						<? foreach($categories as $category): ?>
+						<?php foreach($categories as $category): ?>
 							<option value="<?=$category->id?>"><?=$category->name?></option>
-						<? endforeach ?>
+						<?php endforeach ?>
 					</select>
 				</td>
-				<td><input type="text" class="count" name="count[]"
+				<td><input type="text" class="count"
+						name="count[]"
 						onblur="update_sum();" /></td>
 				<td><input type="text" class="purchase_price"
 						name="purchase_price[]"
 						onkeypress="fix_comma(event, this)"
 						onblur="update_sum();" /></td>
+				<td><input type="text" class="pant"
+						name="pant[]"
+						onkeypress="fix_comma(event, this)"
+						onblur="update_sum()"/></td>
+
 				<td class="row-sum numeric"></td>
 				<td class="row-a numeric"></td>
 				<td class="row-margin numeric"></td>

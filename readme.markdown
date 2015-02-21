@@ -2,7 +2,7 @@
 A Point of Sale (POS) system run in a browser. It handles a barcodescanner to sell stuffs.
 
 ## State of the project
-The project is in active use but should be considerd an unstable alpha.
+The project is in active use but should be considerd a beta.
 
 ## Features
 * Sell things with a barcode scanner
@@ -10,6 +10,11 @@ The project is in active use but should be considerd an unstable alpha.
 * Track deliveries
 * Track stock
 * Contains a (very) limited book keeping system
+
+## Demo
+There is a demo of the system running here http://retail.eric.druid.se/Retail. As it's running on a raspberrypi, please go easy on it if it feels sluggish.
+username: admin
+password: admin
 
 ## Requirements
 ### Server
@@ -29,19 +34,46 @@ This project has only been tested to work with firefox and chromium but other br
 # Setting up the system
 ## Installation
 1. Place the content of the project in a folder
-2. Create an empty mysql database for the project. If the database name is not "nitroxy\_retail" grant.sql needs to be updated accordingly.
-3. Create a db user. If the name of the user is not "nitroxy\_retail", grant.sql needs to be updated accordingly.
-4. Copy db\_settings/nitroxy\_retail.php to db\_settings/nitroxy\_retail.local.php and edit the settings to your configuration.
-5. Run (in order) 
-   1. source nitroxy\_retail.sql
-   2. source data.sql
-   3. source grant.sql
+2. Create an empty mysql database for the project. If the database name is not `nitroxy_retail` `grant.sql` needs to be updated accordingly.
+3. Create a db user. If the name of the user is not `nitroxy_retail`, `grant.sql` needs to be updated accordingly.
+4. Copy `db_settings/nitroxy_retail.php` to `db_settings/nitroxy_retail.local.php` and edit the settings to your configuration.
+5. Start the mysql prompt and run the following `mysql -u root -p nitroxy_retail --default-character-set=utf8`
+   1. `source nitroxy_retail.sql`
+   2. `source data.sql`
+   3. `source grant.sql`
 6. Compile genbarcode for your architecture (can be ignored if you don't want barcodes for your products)
-   1. make -C lib/src/genbarcode-0.4
-   2. mkdir lib/bin
-   3. mv lib/src/genbarcode-0.4/genbarcode lib/bin
-7. Point your webserver to the public directory
-8. Unless you are from the society Proxxi you want to do something about what is done in contrellers/Session.php in the authenticate part so as to not authenticate against Proxxis system...
+   1. `make -C lib/src/genbarcode-0.4`
+   2. `mkdir lib/bin`
+   3. `mv lib/src/genbarcode-0.4/genbarcode lib/bin`
+7. Set up apache2
+   1. create a new site in `/etc/apache2/sites_available/100-nitroxy-retail-system.conf` (debianistic systems)
+      This is what I have in my test config, update as needed with ssl cert etc.
+		```
+		NameVirtualHost *:80
+
+		<VirtualHost *:80>
+			ServerName retail.eric.druid.se
+			ServerAlias retail
+
+			DocumentRoot /path/to/root/Nitroxy-retail-system/public
+			<Directory /path/to/root/Nitroxy-retail-system/public>
+				Options Indexes FollowSymLinks MultiViews
+				AllowOverride All
+				Order allow,deny
+				Require all granted # apache2 version >= 2.4
+			</Directory>
+
+			ErrorLog ${APACHE_LOG_DIR}/nitroxy_retail_error.log
+			LogLevel warn
+			CustomLog ${APACHE_LOG_DIR}/nitroxy_retail_access.log combined
+		</VirtualHost>
+		```
+
+  2. Enable the site with `sudo a2ensite 100-nitroxy-retail-system.conf`
+  3. Enable apache2 module rewrite `sudo a2enmod rewrite`
+  4. If php version < 5.4, make sure `/etc/php5/apache2/php.ini` has `short_open_tag = On`. Have a look at other settings as desired.
+  5. Restart apache `sudo service apache2 restart`
+8. Unless you are from the society Proxxi you want to do something about what is done in `classes/User.php` in the `external_login` function so as to not authenticate against Proxxis system...
 
 ## Adding products to the system
 1. Log in to the system
