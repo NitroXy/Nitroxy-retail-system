@@ -1,0 +1,84 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+
+    - name: Installing LAMP stack
+      apt:
+        state: present
+        name:
+          - apache2
+          - libapache2-mod-php5
+          - mysql-server
+          - php5
+          - php5-gd
+          - php5-mysql
+
+    - name: Installing other utils
+      apt:
+        state: present
+        name:
+          - python-mysqldb
+          - emacs-nox
+
+    - name: Configure vhost
+      notify: restart apache2
+      copy:
+        src: nitroxy_retail.conf
+        dest: /etc/apache2/sites-available/nitroxy_retail.conf
+
+    - name: Enable vhost
+      notify: restart apache2
+      command: a2ensite nitroxy_retail creates=/etc/apache2/sites-enabled/nitroxy_retail.conf
+
+    - name: Disable default vhost
+      notify: restart apache2
+      command: a2dissite 000-default removes=/etc/apache2/sites-enabled/000-default.conf
+
+    - name: Enable mod_rewrite
+      notify: restart apache2
+      command: a2enmod rewrite creates=/etc/apache2/mods-enabled/rewrite.load
+
+    - name: 'PHP: Enable display_errors'
+      notify: restart apache2
+      lineinfile: &php
+        dest: /etc/php5/apache2/php.ini
+        backrefs: yes
+        regexp: '(display_errors =) Off'
+        line: '\1 On'
+
+    - name: 'PHP: Set error_reporting'
+      notify: restart apache2
+      lineinfile:
+        <<: *php
+        regexp: '(error_reporting =) E_ALL .+'
+        line: '\1 E_ALL'
+
+    - name: 'PHP: Set date.timezone'
+      notify: restart apache2
+      lineinfile:
+        <<: *php
+        regexp: ';(date.timezone =)'
+        line: '\1 Europe/Stockholm'
+
+    - name: Create MySQL database
+      mysql_db: name='nitroxy_retail'
+      register: import
+
+    - name: Import MySQL database
+      mysql_db: name='nitroxy_retail' state=import target=/vagrant/nitroxy_retail.sql
+      when: import|changed
+
+    - name: Create MySQL user
+      mysql_user: name=nitroxy_retail password='fuzzy kitten' priv='nitroxy_retail.*:ALL'
+
+    - name: Creating retail admin user
+      command: echo -e "admin\nadmin\nadmin\nadmin\nadmin\n" | php user.php
+      when: import|changed
+
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=reloaded
+
+    - name: restart mysql
+      service: name=mysql state=reloaded
