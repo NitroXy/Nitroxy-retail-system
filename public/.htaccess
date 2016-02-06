@@ -1,16 +1,16 @@
-### MAPPAR I PUBLIC SOM SKA GÅ ATT KOMMA ÅT
+### MAPPAR I PUBLIC SOM SKA GÃ… ATT KOMMA Ã…T
 
 RewriteCond %{REQUEST_URI} !^/gfx/.+
 RewriteCond %{REQUEST_URI} !^/scripts/.+
 RewriteCond %{REQUEST_URI} !^/js/.+
 
-### FILER I PUBLIC SOM SKA GÅ ATT KOMMA ÅT
+### FILER I PUBLIC SOM SKA GÃ… ATT KOMMA Ã…T
 
 RewriteCond %{REQUEST_URI} !^/index.php/
 RewriteCond %{REQUEST_URI} !^/style.css
 RewriteCond %{REQUEST_URI} !^/favicon
 
-### ÄNDRA INGET NEDANFÖR DENNA RAD
+### Ã„NDRA INGET NEDANFÃ–R DENNA RAD
 
 RewriteRule (.*) index.php/$1
 RewriteEngine On
