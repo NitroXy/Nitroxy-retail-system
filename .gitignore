@@ -3,3 +3,5 @@ db_settings/nitroxy_retail.local.php
 
 /vendor/
 /nxauth_private_key
+
+/.vagrant
