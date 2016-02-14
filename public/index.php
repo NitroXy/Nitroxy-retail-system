@@ -2,7 +2,7 @@
 require "../includes.php";
 
 // Prepare path
-$path_info=$_SERVER['PATH_INFO'];
+$path_info = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
 $untouched_request=$path_info;
 $request=explode('/',$path_info);
 array_shift($request);
