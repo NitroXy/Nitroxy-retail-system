@@ -13,6 +13,7 @@
           - php5
           - php5-gd
           - php5-mysql
+          - php5-curl
 
     - name: Installing other utils
       apt:
