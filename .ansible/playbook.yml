@@ -40,27 +40,17 @@
       notify: restart apache2
       command: a2enmod rewrite creates=/etc/apache2/mods-enabled/rewrite.load
 
-    - name: 'PHP: Enable display_errors'
+    - name: Configure PHP
       notify: restart apache2
-      lineinfile: &php
+      lineinfile:
         dest: /etc/php5/apache2/php.ini
         backrefs: yes
-        regexp: '(display_errors =) Off'
-        line: '\1 On'
-
-    - name: 'PHP: Set error_reporting'
-      notify: restart apache2
-      lineinfile:
-        <<: *php
-        regexp: '(error_reporting =) E_ALL .+'
-        line: '\1 E_ALL'
-
-    - name: 'PHP: Set date.timezone'
-      notify: restart apache2
-      lineinfile:
-        <<: *php
-        regexp: ';(date.timezone =)'
-        line: '\1 Europe/Stockholm'
+        regexp: "{{ item.regexp }}"
+        line: '\1 {{ item.line }}'
+      with_items:
+        - { regexp: '(display_errors =) Off', line: 'On' }
+        - { regexp: '(error_reporting =) E_ALL .+', line: 'E_ALL' }
+        - { regexp: ';(date.timezone =)', line: '\1 Europe/Stockholm' }
 
     - name: Create MySQL database
       mysql_db: name='nitroxy_retail'
@@ -75,6 +65,11 @@
 
     - name: Creating retail admin user
       shell: 'echo -e "admin\nadmin\nadmin\nadmin\n" | php /vagrant/user.php admin'
+
+    - name: Configure NitroXy retail
+      template:
+        src: nitroxy_retail.local.php.j2
+        dest: /vagrant/db_settings
 
   handlers:
     - name: restart apache2
