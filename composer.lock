@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9777edc9c05debbea45507177f2e76d2",
+    "hash": "0d0d5ab3fbe4fe5fdf39a41e19c7d37f",
+    "content-hash": "ae5afa37dd781bf926bdbd0eb441ba87",
     "packages": [
         {
             "name": "nitroxy/nxauth",
@@ -21,6 +22,7 @@
                 "shasum": ""
             },
             "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
                     "name": "Andreas Tarandi",
@@ -28,10 +30,6 @@
                 }
             ],
             "description": "A module for authenticating with NitroXys CAS-service",
-            "support": {
-                "source": "https://github.com/NitroXy/nxauth/tree/v1.0",
-                "issues": "https://github.com/NitroXy/nxauth/issues"
-            },
             "time": "2015-02-21 20:25:32"
         }
     ],
