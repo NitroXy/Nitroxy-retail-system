@@ -1,6 +1,10 @@
 <?php
 $global_root = dirname(__FILE__);
 
+if ( !file_exists("{$global_root}/vendor") ){
+	die("composer vendor folder missing, run 'composer install'");
+}
+
 // Get settings
 require_once "settings.php";
 
