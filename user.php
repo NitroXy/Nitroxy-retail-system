@@ -13,9 +13,9 @@ function getstring($str){
 function getpass($str){
 	echo $str;
 	ob_flush();
-	system('stty -echo');
+	if ( posix_isatty(0) ) system('stty -echo');
 	$passwd = substr(fgets(STDIN),0,-1);
-	system('stty echo');
+	if ( posix_isatty(0) ) system('stty echo');
 	echo "\n";
 	return $passwd;
 }
