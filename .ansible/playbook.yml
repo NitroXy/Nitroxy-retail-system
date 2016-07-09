@@ -60,6 +60,10 @@
       mysql_db: name='nitroxy_retail' state=import target=/vagrant/nitroxy_retail.sql
       when: import|changed
 
+    - name: Seed database
+      mysql_db: name='nitroxy_retail' state=import target=/vagrant/data.sql
+      when: import|changed
+
     - name: Create MySQL user
       mysql_user: name=nitroxy_retail password='fuzzy kitten' priv='nitroxy_retail.*:ALL'
 
@@ -69,7 +73,7 @@
     - name: Configure NitroXy retail
       template:
         src: nitroxy_retail.local.php.j2
-        dest: /vagrant/db_settings
+        dest: /vagrant/db_settings/nitroxy_retail.local.php
 
   handlers:
     - name: restart apache2
