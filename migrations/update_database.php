@@ -1,5 +1,5 @@
 #!/usr/bin/php
-<?
+<?php
 include dirname(__FILE__) . "/../includes.php";
 include "$repo_root/libs/color_terminal.php";
 
@@ -128,7 +128,7 @@ function run_migration($version, $filename) {
 	}
 }
 
-/** 
+/**
  * Returns true if the specified version is applied
  */
 function migration_applied($version) {

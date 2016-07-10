@@ -60,7 +60,7 @@
 				</div>
 			</form>
 		</li>
-	<?php else: ?>
+	<?php elseif ($settings['primary_login_method'] == "nxauth"): ?>
 		<li>
 			<a href="/Session/nx_login?kickback=<?=htmlspecialchars(kickback_url())?>">
 				Logga in
@@ -71,6 +71,11 @@
 				Lokal inloggning
 			</a>
 		</li>
+	<?php else: ?>
+		<li>
+			<a href="/Session/login?kickback=<?=htmlspecialchars(kickback_url())?>">
+				Logga in
+			</a>
+		</li>
 	<?php endif ?>
 </ul>
-
