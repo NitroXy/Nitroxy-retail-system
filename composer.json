@@ -1,12 +1,7 @@
 {
 	"name": "nitroxy/nitroxy-retail-system",
 	"require": {
-		"nitroxy/nxauth": "^1.0"
-	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url":  "https://github.com/nitroxy/nxauth.git"
-		}
-	]
+		"nitroxy/nxauth": "^1.0",
+		"nitroxy/basic-object": "^1.3"
+	}
 }

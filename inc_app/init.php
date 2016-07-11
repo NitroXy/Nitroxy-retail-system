@@ -10,7 +10,7 @@ $repo_root = dirname(dirname(__FILE__));
  * Automatiskt anropad av php on-demand för att include:a filer med klassdefinitioner.
  * Antar att den globala variabeln $repo_root innehåller sökvägen till svn-repots root-mapp.
  */
-function __autoload($class) {
+spl_autoload_register(function($class){
 	global $repo_root;
 	if(substr($class, -1, 1) == 'C') {
 		$controller = substr($class, 0, -1);
@@ -31,10 +31,11 @@ function __autoload($class) {
 		require_once $repo_root.'/classes/'.$class.'.php';
 		return;
 	}
-}
+});
+
+require '../vendor/autoload.php';
 
 /**
  * Klasser som behöver instantieras till en global.
  */
 $db = new DatabaseConnectioni($webpage_stage, true);
-?>
